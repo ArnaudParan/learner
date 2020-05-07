@@ -30,7 +30,7 @@ struct TestId {
 async fn api_test(test_info: web::Query<TestId>) -> impl Responder {
     let conn = sqlite::open(DB_PATH).unwrap();
     let mut statement = conn
-        .prepare("SELECT id, original, phonetic, translation FROM test WHERE test.testid = ? ORDER BY RANDOM() LIMIT 1;")
+        .prepare("SELECT id, original, translation, phonetic FROM test WHERE test.testid = ? ORDER BY RANDOM() LIMIT 1;")
         .unwrap();
 
     statement.bind(1, test_info.testid).unwrap();
@@ -39,20 +39,36 @@ async fn api_test(test_info: web::Query<TestId>) -> impl Responder {
 
     // TODO mix the data
     if let State::Row = statement.next().unwrap() {
-        let mut ids: Vec<usize> = (0..3).collect();
+        let labels = ["original", "translation", "phonetic"];
         let mut rng = rand::thread_rng();
-        ids.shuffle(&mut rng);
 
-        let labels = ["original", "phonetic", "translation"];
-        res = json!({
-            "id": statement.read::<i64>(0).unwrap(),
-            "data": [
-            {"val": statement.read::<String>(ids[0] + 1).unwrap(), "label": labels[ids[0]]},
-            {"val": statement.read::<String>(ids[1] + 1).unwrap(), "label": labels[ids[1]]},
-            {"val": statement.read::<String>(ids[2] + 1).unwrap(), "label": labels[ids[2]]},
-            ]
-        })
-        .to_string();
+        if let Ok(_) = statement.read::<String>(3) {
+            let mut ids: Vec<usize> = (0..3).collect();
+            ids.shuffle(&mut rng);
+
+            res = json!({
+                "id": statement.read::<i64>(0).unwrap(),
+                "data": [
+                {"val": statement.read::<String>(ids[0] + 1).unwrap(), "label": labels[ids[0]]},
+                {"val": statement.read::<String>(ids[1] + 1).unwrap(), "label": labels[ids[1]]},
+                {"val": statement.read::<String>(ids[2] + 1).unwrap(), "label": labels[ids[2]]},
+                ]
+            })
+            .to_string();
+        }
+        else {
+            let mut ids: Vec<usize> = (0..2).collect();
+            ids.shuffle(&mut rng);
+
+            res = json!({
+                "id": statement.read::<i64>(0).unwrap(),
+                "data": [
+                {"val": statement.read::<String>(ids[0] + 1).unwrap(), "label": labels[ids[0]]},
+                {"val": statement.read::<String>(ids[1] + 1).unwrap(), "label": labels[ids[1]]},
+                ]
+            })
+            .to_string();
+        }
     }
     else {
         res = String::from("{\"err\": \"No data found\"}");
