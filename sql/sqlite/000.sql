@@ -1,0 +1,23 @@
+CREATE TABLE tests(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE test(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	original TEXT NOT NULL,
+	translation TEXT NOT NULL,
+	phonetic TEXT,
+	testid INTEGER NOT NULL,
+	FOREIGN KEY(testid) REFERENCES tests(id)
+);
+
+CREATE TABLE test_result(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	original INTEGER,
+	translation INTEGER,
+	phonetic INTEGER,
+	created_at INTEGER,
+	test INTEGER NOT NULL,
+	FOREIGN KEY(test) REFERENCES test(id)
+);
