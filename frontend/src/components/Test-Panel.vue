@@ -1,9 +1,9 @@
 <template>
   <div id="panel">
-    <div v-if="0 in data">
+    <div class="question" v-if="0 in data">
       {{ data[0].val }}
     </div>
-    <div v-else>
+    <div class="question" v-else>
       Waiting for data ...
     </div>
     <div>
@@ -65,8 +65,8 @@ export default {
       this.cache = [];
     },
     validationData: function() {
-      return this.data.map((val, id) => {
-        return { type: val.type, val: val.val, validAnswer: id > 0 ? this.cache[id - 1] : undefined };
+      return this.data.slice(1).map((val, id) => {
+        return { label: val.label, val: val.val, validAnswer: this.cache[id] };
       });
     }
   }
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style>
-#panel {
+.question {
   font-size: xx-large;
 }
 

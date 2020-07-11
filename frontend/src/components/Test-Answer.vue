@@ -63,6 +63,10 @@ export default {
 @use "@material/button";
 @include button.core-styles;
 
+.mdc-button__label {
+  font-size: xx-large;
+}
+
 .line {
   width: 100%;
   margin-top: 10px;

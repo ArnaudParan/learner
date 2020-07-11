@@ -22,7 +22,9 @@ export default {
       const component = this; // eslint-disable-line @typescript-eslint/no-this-alias
       req.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          component.testData = JSON.parse(this.responseText).data;
+          const dat = JSON.parse(this.responseText);
+          component.testData = dat.data;
+          component.testid = dat.id;
         }
       };
       req.open("GET", "/api/test?testid=" + String(this.testId), true);
@@ -33,7 +35,7 @@ export default {
       const req = new XMLHttpRequest();
       req.open("PUT", "/api/test_result", true);
       req.setRequestHeader("Content-Type", "application/json");
-      req.send(JSON.stringify({testid: this.testId, val: data}));
+      req.send(JSON.stringify({testid: this.testid, data: data}));
     },
     onValidation: function(data) {
       this.sendData(data);
@@ -42,6 +44,7 @@ export default {
   },
   data: function() {
     return {
+      testid: null,
       testData: []
     };
   },

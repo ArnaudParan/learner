@@ -814,6 +814,7 @@ dependencies = [
  "actix-files",
  "actix-rt",
  "actix-web",
+ "lazy_static",
  "rand",
  "serde",
  "serde_json",
