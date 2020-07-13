@@ -5,7 +5,7 @@ module.exports = {
   pages: {
 
     index: './src/main.ts',
-    test: './src/test.ts',
+    test: './src/test.js',
 
   },
 

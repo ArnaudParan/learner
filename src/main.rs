@@ -30,8 +30,10 @@ async fn index() -> Result<NamedFile> {
 }
 
 #[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct TestId {
     testid: i64,
+    old_test: i64,
 }
 
 #[get("/api/test")]
@@ -46,6 +48,7 @@ async fn api_test(test_info: web::Query<TestId>) -> Result<impl Responder> {
         .unwrap();
 
     statement.bind(1, test_info.testid).unwrap();
+    statement.bind(2, test_info.old_test).unwrap();
 
     let res: String;
 

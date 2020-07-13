@@ -1,3 +1,4 @@
+<!-- TODO pas deux fois le même test et touches pour résoudre les tests sans clics -->
 <template>
   <div id="panel">
     <div class="question" v-if="0 in data">
@@ -68,6 +69,29 @@ export default {
       return this.data.slice(1).map((val, id) => {
         return { label: val.label, val: val.val, validAnswer: this.cache[id] };
       });
+    },
+    validateButton: function() {
+      const ans = this.$refs.answer.filter(x => !x.revealed).reverse().pop();
+      if (ans !== undefined) {
+        ans.revealed = true;
+      }
+      else if (this.filled === true) {
+        this.$emit('data-validated', this.validationData());
+      }
+    },
+    okButton: function() {
+      const ans = this.$refs.answer.filter(x => x.revealed).reverse().pop();
+      if (ans !== undefined) {
+        ans.validated = true;
+        ans.$emit("ok");
+      }
+    },
+    errorButton: function() {
+      const ans = this.$refs.answer.filter(x => x.revealed).reverse().pop();
+      if (ans !== undefined) {
+        ans.validated = true;
+        ans.$emit("error");
+      }
     }
   }
 };

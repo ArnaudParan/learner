@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-hotkey="keymap">
     <Test-Panel
       ref="panel"
       v-bind:data="testData"
@@ -27,7 +27,7 @@ export default {
           component.testid = dat.id;
         }
       };
-      req.open("GET", "/api/test?testid=" + String(this.testId), true);
+      req.open("GET", "/api/test?testid=" + String(this.testId) + "&oldTest=" + String(this.testid === null ? -1 : this.testid), true);
       req.setRequestHeader("Content-Type", "application/json");
       req.send();
     },
@@ -49,6 +49,19 @@ export default {
     };
   },
   computed: {
+    keymap: function() {
+      return {
+        'space': () => {
+          this.$refs.panel.validateButton();
+        },
+        'o': () => {
+          this.$refs.panel.okButton();
+        },
+        'n': () => {
+          this.$refs.panel.errorButton();
+        }
+      };
+    },
     testId: function() {
       return parseInt(window.location.href.split("/").pop());
     }
