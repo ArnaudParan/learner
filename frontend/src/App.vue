@@ -19,9 +19,17 @@ export default {
           Vocabulary: 1,
           Grammar: 2
         },
-        "Ancient Greek": {
-          Vocabulary: 3,
-          Grammar: 4
+        russian: {
+          Vocabulary: 3
+        },
+        hebrew: {
+          Vocabulary: 4
+        },
+        latin: {
+          Vocabulary: 5
+        },
+        greek: {
+          Vocabulary: 6
         }
       }
     };
